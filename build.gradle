@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.diffplug.spotless' version '7.0.4'
 }
 
 group = 'com.sinse'
@@ -36,4 +37,23 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.named('compileJava') {
+	dependsOn 'spotlessApply'
+}
+
+spotless {
+	java {
+		//Google JAVA Format 적용
+		googleJavaFormat()
+		//아래 순서로 import 문 정렬
+		importOrder('java', 'javax', 'jakarta', 'org', 'com')
+		//
+		removeUnusedImports()
+
+		trimTrailingWhitespace()
+
+		endWithNewline()
+	}
 }
