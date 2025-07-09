@@ -49,13 +49,13 @@ spotless {
 	java {
 		//Google JAVA Format 적용
 		googleJavaFormat()
-		//아래 순서로 import 문 정렬
+		//아래 순서로 import 문 정렬(java -> javax -> jakarta -> org -> com)
 		importOrder('java', 'javax', 'jakarta', 'org', 'com')
-		//
+		//사용하지 않는 임포트 제거
 		removeUnusedImports()
-
+		//행 끝 공백 제거
 		trimTrailingWhitespace()
-
+		//파일 마지막에 개행 1개 유지
 		endWithNewline()
 	}
 }
