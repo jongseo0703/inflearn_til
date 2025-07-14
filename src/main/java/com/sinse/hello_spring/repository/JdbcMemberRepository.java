@@ -87,7 +87,29 @@ public class JdbcMemberRepository implements MemberRepository {
 
   @Override
   public Optional<Member> findByName(String name) {
-    return Optional.empty();
+    String sql = "select * from member where name = ?";
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
+
+    try {
+      conn = getConnection();
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1, name);
+      rs = pstmt.executeQuery();
+
+      if (rs.next()) {
+        Member member = new Member();
+        member.setId(rs.getLong("id"));
+        member.setName(rs.getString("name"));
+        return Optional.of(member);
+      }
+      return Optional.empty();
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    } finally {
+      close(conn, pstmt, rs);
+    }
   }
 
   @Override
@@ -145,12 +167,8 @@ public class JdbcMemberRepository implements MemberRepository {
       throw new RuntimeException(e);
     }
 
-    try {
-      if (conn != null) {
-        conn.close();
-      }
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
+    if (conn != null) {
+      DataSourceUtils.releaseConnection(conn, dataSource);
     }
   }
 }
