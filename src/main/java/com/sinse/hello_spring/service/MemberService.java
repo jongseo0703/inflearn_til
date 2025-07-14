@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sinse.hello_spring.domain.Member;
 import com.sinse.hello_spring.repository.MemberRepository;
 
+@Transactional
 public class MemberService {
 
   private final MemberRepository memberRepository;
